@@ -8,6 +8,8 @@ import com.user_register.user_register.user.GroupType;
 import com.user_register.user_register.user.UserModel;
 import com.user_register.user_register.userDto.UserDto;
 
+import java.util.Objects;
+
 @Service
 public class UserService {
     
@@ -22,6 +24,7 @@ public class UserService {
     public UserModel addUser(UserDto dto){
 
         UserModel newUser = new UserModel(dto);
+        validateUser(dto);
 
         if(dto.groupType() == GroupType.AVENGERS){
             String codiname = nicknameService.getAvengersList().stream().findFirst().orElseThrow();
@@ -33,10 +36,22 @@ public class UserService {
             newUser.setNickName(codiname);
         }
 
-        if(nicknameService.getAvengersList().isEmpty() || nicknameService.getJusticeLeagueList().isEmpty()){
-            throw new ErrorMsg("Não há mais codinomes disponíveis.");
+        if(nicknameService.getJusticeLeagueList().isEmpty()) {
+            throw new ErrorMsg("Não há mais codinomes disponíveis na lista Liga da Justiça.");
+        }else if(nicknameService.getAvengersList().isEmpty()) {
+            throw new ErrorMsg("Não há mais codinomes disponíveis na lista Vingadores.");
         }
 
         return userRepository.save(newUser);
+    }
+
+    public void validateUser(UserDto dto){
+        UserModel username = userRepository.findByUserName(dto.userName());
+        UserModel userEmail = userRepository.findByEmail(dto.email());
+
+        if(username != null || userEmail != null){
+            throw new ErrorMsg("Usuário com e-mail ou username já cadastrado.");
+        }
+
     }
 }
