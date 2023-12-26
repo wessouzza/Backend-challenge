@@ -3,6 +3,8 @@ package com.user_register.user_register.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.user_register.user_register.exceptions.ErrorMsg;
+import com.user_register.user_register.userDto.UserDto;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -50,7 +52,6 @@ public class NicknameService {
         }catch(Exception e){
             e.printStackTrace();
         }
-
     }
 
     @PostConstruct
@@ -70,6 +71,12 @@ public class NicknameService {
 
         }catch(Exception e){
             e.printStackTrace();;
+        }
+    }
+
+    public static void checkNicknameList(List<String> nickList){
+        if(nickList.isEmpty()){
+            throw new ErrorMsg("Não há mais espaço na lista.");
         }
     }
 

@@ -1,5 +1,9 @@
 package com.user_register.user_register.controller;
 
+import com.user_register.user_register.exceptions.ErrorMsg;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,8 +23,12 @@ public class UserController {
     }
 
     @PostMapping
-    public UserModel addUser(@RequestBody UserDto userDto){
-        UserModel newUser = userService.addUser(userDto); 
-        return newUser;
+    public ResponseEntity<?> addUser(@Valid @RequestBody UserDto userDto){
+        try{
+            UserModel newUser = userService.addUser(userDto);
+            return ResponseEntity.ok(newUser);
+        }catch (ErrorMsg msg){
+           return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(msg.getMessage());
+        }
     }
 }

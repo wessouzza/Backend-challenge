@@ -8,6 +8,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "gammers")
@@ -15,7 +16,9 @@ public class UserModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    @NotBlank(message = "Insira um username.")
     private String userName;
+    @NotBlank(message = "Insira um email válido.")
     private String email;
     private int phoneNumber;
     private String nickName;

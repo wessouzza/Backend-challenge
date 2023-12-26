@@ -10,6 +10,8 @@ import com.user_register.user_register.userDto.UserDto;
 
 import java.util.Objects;
 
+import static com.user_register.user_register.service.NicknameService.checkNicknameList;
+
 @Service
 public class UserService {
     
@@ -26,21 +28,17 @@ public class UserService {
         UserModel newUser = new UserModel(dto);
         validateUser(dto);
 
+        String codiname;
         if(dto.groupType() == GroupType.AVENGERS){
-            String codiname = nicknameService.getAvengersList().stream().findFirst().orElseThrow();
+            codiname = nicknameService.getAvengersList().stream().findFirst().orElseThrow();
             nicknameService.getAvengersList().remove(codiname);
-            newUser.setNickName(codiname);
+            checkNicknameList(nicknameService.getAvengersList());
         }else{
-            String codiname = nicknameService.getJusticeLeagueList().stream().findFirst().orElseThrow();
+            codiname = nicknameService.getJusticeLeagueList().stream().findFirst().orElseThrow();
             nicknameService.getJusticeLeagueList().remove(codiname);
-            newUser.setNickName(codiname);
+            checkNicknameList(nicknameService.getJusticeLeagueList());
         }
-
-        if(nicknameService.getJusticeLeagueList().isEmpty()) {
-            throw new ErrorMsg("Não há mais codinomes disponíveis na lista Liga da Justiça.");
-        }else if(nicknameService.getAvengersList().isEmpty()) {
-            throw new ErrorMsg("Não há mais codinomes disponíveis na lista Vingadores.");
-        }
+        newUser.setNickName(codiname);
 
         return userRepository.save(newUser);
     }
