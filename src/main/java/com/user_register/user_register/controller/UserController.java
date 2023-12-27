@@ -4,14 +4,13 @@ import com.user_register.user_register.exceptions.ErrorMsg;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.user_register.user_register.service.UserService;
 import com.user_register.user_register.user.UserModel;
 import com.user_register.user_register.userDto.UserDto;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("user")
@@ -30,5 +29,10 @@ public class UserController {
         }catch (ErrorMsg msg){
            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(msg.getMessage());
         }
+    }
+
+    @GetMapping
+    public List<UserModel> listUsers(){
+        return userService.listUsers();
     }
 }

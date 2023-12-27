@@ -8,6 +8,7 @@ import com.user_register.user_register.user.GroupType;
 import com.user_register.user_register.user.UserModel;
 import com.user_register.user_register.userDto.UserDto;
 
+import java.util.List;
 import java.util.Objects;
 
 import static com.user_register.user_register.service.NicknameService.checkNicknameList;
@@ -41,6 +42,10 @@ public class UserService {
         newUser.setNickName(codiname);
 
         return userRepository.save(newUser);
+    }
+
+    public List<UserModel> listUsers(){
+        return userRepository.findAll();
     }
 
     public void validateUser(UserDto dto){
